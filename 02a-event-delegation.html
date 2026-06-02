@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Delegation with Dynamic Elements</title>
+  <style media="screen">
+    body { font-family: system-ui, sans-serif; max-width: 60ch; margin: 2rem auto; padding: 0 1rem; }
+    #tiles { display: flex; flex-wrap: wrap; gap: 1rem; margin: 2rem 0; }
+	output { display: block; margin-top: 1rem; }
+    tile-component {
+      display: block;
+      flex: 1;
+      min-width: 120px;
+      border: 1px solid #888;
+      padding: 1rem;
+      text-align: center;
+    }
+    tile-component button { margin-top: .5rem; }
+    #log { padding: 1rem; background: #f4f4f4; min-height: 2.5rem; }
+    .controls { margin-top: 1rem; margin-bottom: 2rem; }
+    #add-tile-btn { padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Event Delegation (Dynamic)</h1>
+  <p>
+    This example demonstrates a key benefit of event delegation: it automatically works for elements added to the DOM <em>after</em> the event listener was attached.
+  </p>
+
+  <div class="controls">
+    <button id="add-tile-btn">Add Random Tile</button>
+  </div>
+
+  <section id="tiles">
+    <tile-component label="Alpha"></tile-component>
+    <tile-component label="Beta"></tile-component>
+    <tile-component label="Gamma"></tile-component>
+  </section>
+
+  <output id="log">Click a tile.</output>
+
+  <script type="module">
+    class TileComponent extends HTMLElement {
+      connectedCallback() {
+        const label = this.getAttribute('label') || 'Tile';
+        this.innerHTML = `
+          <h2>${label}</h2>
+          <button type="button">Click me</button>
+        `;
+        this.querySelector('button').addEventListener('click', () => {
+          this.dispatchEvent(new CustomEvent('tile-clicked', {
+            bubbles: true,
+            detail: { label }
+          }));
+        });
+      }
+    }
+    customElements.define('tile-component', TileComponent);
+
+    // Array of possible random names
+    const names = ['Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega'];
+
+	window.addEventListener('DOMContentLoaded', function () {
+
+		// 1. Setup the Event Delegation listener on the parent container
+		// This single listener will catch events from the existing tiles AND any new ones we add later!
+    	document.getElementById('tiles').addEventListener('tile-clicked', (event) => {
+      			const sourceTile = event.target.closest('tile-component');
+      			if (!sourceTile) return;
+
+			    const log = document.getElementById('log');
+      			log.textContent = `Last clicked: ${event.detail.label} @ ${new Date().toLocaleTimeString()}`;
+    	});
+
+        // 2. Setup the "Add Tile" button functionality
+        document.getElementById('add-tile-btn').addEventListener('click', () => {
+            const randomName = names[Math.floor(Math.random() * names.length)];
+
+            // Create the new component and set its attribute
+            const newTile = document.createElement('tile-component');
+            newTile.setAttribute('label', randomName);
+
+            // Append it to the container.
+            // Notice we DO NOT need to attach a 'tile-clicked' event listener to this new tile!
+            // The delegation listener on the #tiles container handles it automatically.
+            document.getElementById('tiles').appendChild(newTile);
+        });
+	});
+
+  </script>
+</body>
+</html>

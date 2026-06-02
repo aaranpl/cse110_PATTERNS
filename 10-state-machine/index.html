@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>State Machine — Explicit Transitions</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <script type="module" src="scripts/main.js"></script>
+</head>
+<body>
+
+  <h1>Lesson 10 — State Machine</h1>
+
+  <p class="intro">
+    An explicit state machine makes impossible states <strong>unreachable</strong>.
+    From <code>success</code> you can't go back to <code>loading</code> without
+    going through <code>reset</code> to <code>idle</code> first. The transition
+    table in <code>machine.js</code> is the contract: if an event isn't listed for
+    the current state, <code>next()</code> warns and returns the current state
+    unchanged — the UI simply cannot get into an undefined configuration.
+  </p>
+
+  <p class="intro">
+    Open the browser console and try clicking "Fetch (succeeds)" while already in
+    <code>success</code> state — you'll see the invalid-transition warning, and
+    nothing will break.
+  </p>
+
+  <p class="intro">
+    Note: the initial fetch is deterministic (you pick "succeeds" or "fails"),
+    but <strong>Retry</strong> randomizes the outcome — sometimes you'll land
+    back in <code>error</code>. That's intentional: real-world retries don't
+    come with a guarantee, and the state machine has to handle either result.
+  </p>
+
+  <div class="demo">
+    <fetch-view></fetch-view>
+  </div>
+
+  <aside class="callout">
+    <h2>What's next — Lesson 11 (Robustness)</h2>
+    <p>
+      Lesson 11 (Robustness) used an <em>implicit</em> state machine: the
+      <code>&lt;user-card&gt;</code> component tracked
+      <code>idle → loading → success | error</code> via <code>data-state</code>
+      attributes and method calls, with no single source-of-truth for which
+      transitions were legal.
+    </p>
+    <p>
+      This lesson is the <strong>formal version</strong> of that same idea —
+      the transition table in <code>machine.js</code> makes every valid move
+      explicit and every invalid move auditable. Same concept, made testable:
+      you can import <code>next()</code> and assert on transitions without
+      touching the DOM at all.
+    </p>
+  </aside>
+
+</body>
+</html>

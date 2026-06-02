@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 07 — Strategy</title>
+  <link rel="stylesheet" href="./styles/main.css" />
+  <script type="module" src="./scripts/main.js"></script>
+</head>
+<body>
+  <main>
+    <h1>Lesson 07 — Strategy</h1>
+
+    <p class="lesson-intro">
+      Strategy is <em>swappable behavior with a uniform interface</em>. All four
+      comparator functions in <code>strategies.js</code> share the same signature:
+      <code>(a, b) => number</code>. The <code>&lt;sortable-list&gt;</code> component
+      knows <strong>how to sort</strong> — it calls
+      <code>[...this.items].sort(strategies[this.strategy])</code> — but it does
+      <strong>not</strong> know <strong>how to compare</strong>. That's the strategy's
+      job. Swapping the <code>strategy</code> attribute at runtime is all it takes to
+      change the sort order; no logic inside the component changes at all.
+      The uniform signature is what makes the strategies interchangeable.
+      <br /><br />
+      Looking back: <strong>Lesson 04</strong> (Components) showed how to split UI into
+      encapsulated, reusable pieces — <code>&lt;sortable-list&gt;</code> is one such piece.
+      Looking forward: <strong>Lesson 08</strong> (Dependency Injection) extends this idea —
+      instead of looking up a strategy by name from a module it imports directly, a component
+      can <em>receive</em> its dependencies from the outside, making it even more decoupled
+      and easier to test.
+    </p>
+
+    <div class="demo">
+      <sortable-list strategy="byNameAsc"></sortable-list>
+    </div>
+  </main>
+</body>
+</html>

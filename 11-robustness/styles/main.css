@@ -1,0 +1,60 @@
+body { font-family: system-ui, sans-serif; max-width: 80ch; margin: 2rem auto; padding: 0 1rem; }
+#card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+.callout {
+  border-left: 4px solid #0066cc;
+  background: #eef6ff;
+  padding: 1rem;
+  margin: 2rem 0;
+}
+.callout h2 { margin-top: 0; }
+
+/* Banner painted by the global error / unhandledrejection listeners in
+   scripts/main.js. Distinct colors so students can see at a glance which
+   safety net fired. */
+.safety-net-banner {
+  position: relative;
+  margin: 1rem 0;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border-left: 4px solid;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+.safety-net-banner--sync {
+  background: #fef3c7;
+  border-color: #d97706;
+  color: #78350f;
+}
+.safety-net-banner--async {
+  background: #fce7f3;
+  border-color: #be185d;
+  color: #831843;
+}
+.safety-net-banner strong { display: block; margin-bottom: 0.25rem; }
+.safety-net-banner__detail {
+  margin: 0.25rem 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+}
+.safety-net-banner__hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+.safety-net-banner__close {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.5rem;
+  background: transparent;
+  border: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+}
+.safety-net-banner__close:hover { opacity: 0.7; }

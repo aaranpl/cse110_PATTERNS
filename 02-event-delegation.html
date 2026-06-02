@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Delegation</title>
+  <style media="screen">
+    body { font-family: system-ui, sans-serif; max-width: 60ch; margin: 2rem auto; padding: 0 1rem; }
+    #tiles { display: flex; gap: 1rem; margin: 2rem 0; }
+	output { display: block; margin-top: 1rem; }
+    tile-component {
+      display: block;
+      flex: 1;
+      border: 1px solid #888;
+      padding: 1rem;
+      text-align: center;
+    }
+    tile-component button { margin-top: .5rem; }
+    #log { padding: 1rem; background: #f4f4f4; min-height: 2.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Event Delegation</h1>
+  <p>
+    Instead of attaching a listener to every child, attach one listener to a common parent and let events bubble up. The parent identifies the source via
+    <code>event.target</code> and routes accordingly. This scales to many children
+    and survives children being added or removed dynamically.
+  </p>
+  <p>
+    Importantly, the parent listener does <em>not</em> reach into a child's internals to push data in. It reads <code>event.detail</code> from the event itself.
+  </p>
+
+  <section id="tiles">
+    <tile-component label="Alpha"></tile-component>
+    <tile-component label="Beta"></tile-component>
+    <tile-component label="Gamma"></tile-component>
+  </section>
+
+  <output id="log">Click a tile.</output>
+
+  <script type="module">
+    class TileComponent extends HTMLElement {
+      connectedCallback() {
+        const label = this.getAttribute('label') || 'Tile';
+        this.innerHTML = `
+          <h2>${label}</h2>
+          <button type="button">Click me</button>
+        `;
+        this.querySelector('button').addEventListener('click', () => {
+          this.dispatchEvent(new CustomEvent('tile-clicked', {
+            bubbles: true,
+            detail: { label }
+          }));
+        });
+      }
+    }
+    customElements.define('tile-component', TileComponent);
+
+
+	window.addEventListener('DOMContentLoaded', function () {
+
+
+		// One listener for all tiles. event.target.closest() is robust against
+		// clicks landing on inner elements (e.g., the button) — it always finds
+		// the owning <tile-component>. But notice we never need to read its
+		// internals: event.detail.label carries everything we need.
+		// We can break this code, if we break the HTML structure.
+    	document.getElementById('tiles').addEventListener('tile-clicked', (event) => {
+      			const sourceTile = event.target.closest('tile-component');
+      			if (!sourceTile) return;
+
+			    const log = document.getElementById('log');
+      			log.textContent = `Last clicked: ${event.detail.label} @ ${new Date().toLocaleTimeString()}`;
+    	});
+	});
+
+  </script>
+</body>
+</html>

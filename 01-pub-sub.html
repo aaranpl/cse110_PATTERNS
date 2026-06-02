@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pub-Sub Pattern Example</title>
+</head>
+<body>
+<h1>Pub-Sub Example</h1>
+<p>In this example we have two web components, a <code> &lt;publisher-component&gt;</code> and a <code>&lt;subscriber-component&gt;</code>. When we fill in the form field of the publisher, we can send a custom event which the other component will listen for.</p>
+
+<hr>
+
+<publisher-component></publisher-component>
+
+<subscriber-component></subscriber-component>
+
+<script type="module">
+
+    class PublisherComponent extends HTMLElement {
+        constructor() {
+            super();
+            // Attach a shadow root for true style encapsulation
+            this.attachShadow({ mode: 'open' });
+        }
+
+        connectedCallback() {
+            this.shadowRoot.innerHTML = `
+                <style>
+                    /* :host styles the custom element container itself */
+                    :host {
+                        display: block;
+                        width: 50vw;
+                        border: 1px solid black;
+                        margin: 2rem auto;
+                        padding: 1rem;
+                        background-color: #f9f9f9;
+                    }
+                    input {
+                        padding: 0.5rem;
+                        margin-right: 0.5rem;
+                    }
+                    button {
+                        padding: 0.5rem 1rem;
+                    }
+                </style>
+                <h2>Publisher</h2>
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button id="publish-button">Publish</button>
+            `;
+
+            this.messageInput = this.shadowRoot.querySelector('#message-input');
+            this.publishButton = this.shadowRoot.querySelector('#publish-button');
+
+            this.publishButton.addEventListener('click', () => this.publishMessage());
+        }
+
+        publishMessage() {
+            const message = this.messageInput.value;
+
+            // We use bubbles: true so the event bubbles up the DOM tree
+            // composed: true is REQUIRED for the event to cross the Shadow DOM boundary!
+            const event = new CustomEvent('custom-message', {
+                detail: { msg : message },
+                bubbles: true,
+                composed: true
+            });
+
+            console.log('Dispatching Event:');
+            console.dir(event);
+
+            this.dispatchEvent(event);
+
+            // Clear the input after publishing for better UX
+            this.messageInput.value = '';
+        }
+    }
+
+    class SubscriberComponent extends HTMLElement {
+        constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+
+            // Bind the handler so we can use the exact same reference
+            // when adding and removing the event listener
+            this.handleMessage = this.handleMessage.bind(this);
+        }
+
+        connectedCallback() {
+            this.shadowRoot.innerHTML = `
+                <style>
+                    :host {
+                        display: block;
+                        width: 50vw;
+                        border: 1px solid black;
+                        margin: 2rem auto;
+                        padding: 1rem;
+                        background-color: #eef;
+                    }
+                    #message-output {
+                        font-family: monospace;
+                        font-size: 1.1rem;
+                        color: #333;
+                    }
+                </style>
+                <h2>Subscriber</h2>
+                <p id="message-output">Waiting for messages...</p>
+            `;
+
+            this.messageOutput = this.shadowRoot.querySelector('#message-output');
+
+            // Listen on the document level for bubbling events
+            document.addEventListener('custom-message', this.handleMessage);
+        }
+
+        // As a good teaching practice, always clean up global event listeners
+        // when the component is removed from the DOM to prevent memory leaks
+        disconnectedCallback() {
+            document.removeEventListener('custom-message', this.handleMessage);
+        }
+
+        handleMessage(event) {
+            console.log('Catching Event:');
+            console.dir(event);
+
+            this.messageOutput.textContent = `Received message: "${event.detail.msg}" @ ${new Date().toLocaleTimeString()}`;
+        }
+    }
+
+    customElements.define('publisher-component', PublisherComponent);
+    customElements.define('subscriber-component', SubscriberComponent);
+</script>
+<noscript>
+	Error: JavaScript is required to run this example.
+</noscript>
+</body>
+</html>

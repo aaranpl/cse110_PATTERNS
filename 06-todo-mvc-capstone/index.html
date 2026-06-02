@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 06 — Todo MVC Capstone</title>
+  <link rel="stylesheet" href="./styles/main.css" />
+  <script type="module" src="./scripts/main.js"></script>
+</head>
+<body>
+  <main>
+    <h1>Lesson 06 — Todo MVC Capstone</h1>
+
+    <p class="lesson-intro">
+      This capstone combines two earlier patterns.
+      From <strong>lesson 05 (MVC)</strong>: the <strong>Model</strong>
+      (<code>model.js</code>) owns the todo array and emits a
+      <code>todos-changed</code> event on every mutation — it knows nothing
+      about the DOM. The <strong>Views</strong>
+      (<code>&lt;todo-input&gt;</code>, <code>&lt;todo-list&gt;</code>) only
+      fire <code>intent</code> events and render what they are told — they know
+      nothing about the Model. The <strong>Controller</strong>
+      (<code>controller.js</code>) is the only layer that knows about both.
+      From <strong>lesson 02 (event delegation)</strong>: instead of attaching
+      a listener to every checkbox and every remove button,
+      <code>&lt;todo-list&gt;</code> has <em>exactly one</em> delegated
+      <code>click</code> listener on its shadow root. It reads
+      <code>data-action</code> and <code>data-id</code> off
+      <code>event.target</code> to decide whether to dispatch a
+      <code>toggle</code> or <code>remove</code> intent — adding a hundred
+      todos still requires only that single listener.
+    </p>
+
+    <div class="demo">
+      <todo-input></todo-input>
+      <todo-list></todo-list>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pub-Sub State Change Example</title>
+</head>
+<body>
+<h1>Pub-Sub State Change Example</h1>
+<p>In this example, the Publisher (Color Picker) changes the state (Background Color) of the Subscriber (Color Display) by dispatching a custom event. This demonstrates how disconnected components can communicate and affect each other's visual state.</p>
+
+<hr>
+
+<color-picker-component></color-picker-component>
+
+<color-display-component></color-display-component>
+
+<script type="module">
+
+    class ColorPickerComponent extends HTMLElement {
+        constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+        }
+
+        connectedCallback() {
+            this.shadowRoot.innerHTML = `
+                <style>
+                    :host {
+                        display: block;
+                        width: 50vw;
+                        border: 1px solid black;
+                        margin: 2rem auto;
+                        padding: 1rem;
+                        background-color: #f9f9f9;
+                    }
+                    button {
+                        padding: 0.5rem 1rem;
+                        margin-right: 0.5rem;
+                        cursor: pointer;
+                    }
+                    input[type="color"] {
+                        vertical-align: middle;
+                        margin-left: 0.5rem;
+                    }
+                </style>
+                <h4>Color Picker (Publisher)</h4>
+                <button data-color="#ffb3ba">Pastel Red</button>
+                <button data-color="#baffc9">Pastel Green</button>
+                <button data-color="#bae1ff">Pastel Blue</button>
+
+                <label>
+                    Custom:
+                    <input type="color" id="custom-color" value="#ffffff">
+                </label>
+            `;
+
+            // Setup listeners for the predefined color buttons
+            this.shadowRoot.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', (e) => this.publishColor(e.target.dataset.color));
+            });
+
+            // Setup listener for the custom color picker
+            this.shadowRoot.querySelector('#custom-color').addEventListener('input', (e) => {
+                this.publishColor(e.target.value);
+            });
+        }
+
+        publishColor(newColor) {
+            // Dispatch our custom event with the new color state
+            const event = new CustomEvent('color-changed', {
+                detail: { color: newColor },
+                bubbles: true,
+                composed: true // Required for the event to cross the Shadow DOM boundary!
+            });
+
+            console.log('Dispatching color-changed event:', newColor);
+            this.dispatchEvent(event);
+        }
+    }
+
+    class ColorDisplayComponent extends HTMLElement {
+        constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+
+            // Bind the handler so we can use the exact same reference
+            // when adding and removing the event listener
+            this.handleColorChange = this.handleColorChange.bind(this);
+        }
+
+        connectedCallback() {
+            this.shadowRoot.innerHTML = `
+                <style>
+                    :host {
+                        display: block;
+                        width: 50vw;
+                        height: 200px;
+                        border: 1px solid black;
+                        margin: 2rem auto;
+                        padding: 1rem;
+                        background-color: #ffffff; /* Default state */
+                        transition: background-color 0.4s ease; /* Smooth transition for visual appeal */
+                    }
+                    h2 {
+                        margin-top: 0;
+                        /* Added a background to text so it remains readable regardless of component background */
+                        background: rgba(255, 255, 255, 0.8);
+                        display: inline-block;
+                        padding: 0.2rem 0.5rem;
+                        border-radius: 4px;
+                    }
+                    p {
+                        background: rgba(255, 255, 255, 0.8);
+                        display: inline-block;
+                        padding: 0.2rem 0.5rem;
+                        border-radius: 4px;
+                        font-family: monospace;
+                    }
+                </style>
+                <h2>Color Display (Subscriber)</h2>
+                <br>
+                <p id="color-label">Current Color: #ffffff</p>
+            `;
+
+            this.colorLabel = this.shadowRoot.querySelector('#color-label');
+
+            // Listen on the document level for bubbling events
+            document.addEventListener('color-changed', this.handleColorChange);
+        }
+
+        disconnectedCallback() {
+            // Clean up to prevent memory leaks
+            document.removeEventListener('color-changed', this.handleColorChange);
+        }
+
+        handleColorChange(event) {
+            const newColor = event.detail.color;
+            console.log('Received color-changed event:', newColor);
+
+            // Update the state of this component (its background color)
+            // By modifying the inline style of the component host, we change its visual state
+            this.style.backgroundColor = newColor;
+
+            // Update the text label
+            this.colorLabel.textContent = `Current Color: ${newColor}`;
+        }
+    }
+
+    customElements.define('color-picker-component', ColorPickerComponent);
+    customElements.define('color-display-component', ColorDisplayComponent);
+</script>
+<noscript>
+	Error: JavaScript is required to run this example.
+</noscript>
+</body>
+</html>

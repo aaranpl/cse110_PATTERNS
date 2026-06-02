@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 12 — Stateful Form Capstone</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <span class="lesson-tag">Lesson 12 · Capstone</span>
+  <h1>Stateful Form</h1>
+
+  <div class="intro">
+    <p>
+      This capstone applies the <strong>state machine pattern from lesson 10</strong> and
+      the <strong>robustness (defensive UI) principles from lesson 11</strong> to a real
+      user interaction: a form submission flow.
+    </p>
+    <p>
+      The form moves through <code>idle → submitting → success | error</code> states.
+      The state machine from lesson 10 enforces transitions — invalid events are silently
+      ignored rather than causing unpredictable behavior. The defensive UI from lesson 11
+      drives the user-facing concerns: the input and submit button are disabled while
+      submitting; the submit itself is wrapped in <code>try</code>/<code>catch</code>
+      around an <code>await</code>, and the resulting <code>err.message</code> is shown to
+      the user rather than a generic "something went wrong"; and the error state offers an
+      explicit <em>Retry</em> or <em>Cancel</em> choice rather than leaving the user stuck.
+      A persistent <code>aria-live</code> region announces each state change to screen
+      readers.
+    </p>
+    <p>
+      The mock submit has a 50% failure rate and a 1.5-second delay — try it a few times
+      to see both paths, and watch the error message vary across the simulated failure modes
+      (503, 500, connection refused).
+    </p>
+  </div>
+
+  <div class="demo">
+    <submit-form></submit-form>
+  </div>
+
+  <script type="module" src="scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robustness — Testing Scenarios</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <script type="module" src="scripts/main.js"></script>
+</head>
+<body>
+  <h1>Robustness — Error Handling Tour</h1>
+  <p>
+    A tour of JavaScript's error-handling toolkit, applied to a UI: explicit
+    <code>idle → loading → success | error</code> states, retries, real
+    timeouts via <code>AbortController</code>, a custom
+    <code>TimeoutError</code> class for typed branching in
+    <code>catch</code>, and the two "last-resort" global handlers —
+    <code>error</code> for uncaught synchronous throws and
+    <code>unhandledrejection</code> for promise rejections that nothing
+    handled. Open the console and try the two red buttons to see those
+    last-resort handlers fire.
+  </p>
+  <p>
+    The <code>error</code> and <code>timeout</code> scenarios make real
+    network requests to <code>httpbin.org</code>: <code>error</code> hits
+    a 500 endpoint (fetch <em>resolves</em> but <code>res.ok</code> is
+    false — a common gotcha), and <code>timeout</code> hits a 10-second
+    slow endpoint with a 3-second client-side timeout that aborts the
+    request when it loses the race.
+  </p>
+
+  <aside class="callout">
+    <h2>About the two red buttons</h2>
+    <p>
+      The user-card scenarios above each handle their own errors locally with
+      <code>try</code>/<code>catch</code> — that's the <strong>first line of
+      defense</strong>. The two red buttons in the test bench are
+      <em>deliberately broken</em>: one throws synchronously with no
+      surrounding <code>try</code>, the other rejects a promise with no
+      <code>.catch()</code>. They skip the first line on purpose.
+    </p>
+    <p>
+      The global listeners in <code>scripts/main.js</code> are the
+      <strong>last line of defense</strong>: <code>window.error</code> catches
+      the sync throw, <code>window.unhandledrejection</code> catches the
+      promise rejection — two separate events because async failures settle
+      after the call stack is gone, so the regular <code>error</code> event
+      can't see them. Click each button and watch the page paint a coloured
+      banner: that banner is your listener doing what would be a Sentry
+      upload in production.
+    </p>
+  </aside>
+
+  <test-bench>
+    <section id="card-container" role="region" aria-label="User Cards">
+      <noscript><p>Please enable JavaScript to see the demo.</p></noscript>
+    </section>
+  </test-bench>
+
+  <aside class="callout">
+    <h2>What's next — the testability problem</h2>
+    <p>
+      Notice that <code>&lt;user-card&gt;</code> calls <code>fetch()</code>
+      directly inside <code>fetchWithTimeout</code>. That's fine for the demo,
+      but it raises a testing problem: how do you write a test for the
+      3-second timeout path without actually waiting 3 seconds — or for the
+      500 path without hitting <code>httpbin.org</code>?
+    </p>
+    <p>
+      <strong>Lesson 08 (Dependency Injection)</strong> already showed the answer.
+      The same pattern that let us swap <code>memory</code> and
+      <code>localStorage</code> backends lets us swap a real fetch for a fake one
+      in tests. Inject <code>fetch</code> (or a <code>userService</code>) rather
+      than calling it directly — that's the testability win.
+    </p>
+  </aside>
+</body>
+</html>

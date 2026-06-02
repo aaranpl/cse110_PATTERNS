@@ -1,0 +1,154 @@
+@import "./open-props.css";
+@import "themes.css";
+
+:root {
+    --content-width: min(90%, 65ch);
+    --header-height: 4rem;
+}
+
+/* Base styles */
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--surface-1);
+    color: var(--text-1);
+    font-family: var(--font-sans), sans-serif;
+    line-height: 1.6;
+    transition: background-color var(--theme-transition),
+                color var(--theme-transition);
+}
+
+/* RTL Support */
+[dir="rtl"] {
+    text-align: right;
+}
+
+[dir="rtl"] nav {
+    flex-direction: row-reverse;
+}
+
+/* Header and Navigation */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--surface-2);
+    border-bottom: 1px solid var(--surface-3);
+    padding: var(--size-3);
+}
+
+nav {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--size-3);
+    flex-wrap: wrap;
+}
+
+/* Component Styles */
+theme-picker,
+lang-picker {
+    display: inline-block;
+}
+
+/* Translatable Content */
+translatable-content {
+    display: block;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--size-5) var(--size-3);
+}
+
+translatable-content header {
+    position: static;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: var(--size-4);
+}
+
+translatable-content article {
+    background-color: var(--surface-2);
+    padding: var(--size-4);
+    border-radius: var(--radius-3);
+    box-shadow: var(--shadow-2);
+}
+
+article {
+    background-color: var(--surface-2);
+    padding: var(--size-4);
+    border-radius: var(--radius-3);
+    box-shadow: var(--shadow-2);
+}
+
+article p {
+    margin: 0 0 var(--size-3) 0;
+}
+
+article p:last-child {
+    margin-bottom: 0;
+}
+
+theme-picker {
+    display: block;
+    min-width: 200px;
+}
+
+component-grid {
+    display: grid;
+    gap: var(--size-3);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+control-panel {
+    display: flex;
+    gap: var(--size-3);
+    flex-wrap: wrap;
+    align-items: center;
+    padding: var(--size-3);
+    background-color: var(--surface-2);
+    border-radius: var(--radius-2);
+    margin-bottom: var(--size-3);
+}
+
+component-card {
+    display: block;
+    padding: var(--size-3);
+    background-color: var(--surface-2);
+    border-radius: var(--radius-2);
+    border: 1px solid var(--surface-3);
+}
+
+component-card h2 {
+    color: var(--text-1);
+    font-size: var(--font-size-3);
+    margin-top: 0;
+    margin-bottom: var(--size-3);
+}
+
+/* NoScript Styles */
+.noscript-warning {
+    display: none;
+    padding: var(--size-3);
+    background-color: var(--red-3);
+    color: var(--red-9);
+    border: 1px solid var(--red-5);
+    border-radius: var(--radius-2);
+    margin: var(--size-3);
+}
+
+/* Show appropriate language based on document lang attribute */
+:lang(en) .noscript-warning[lang="en"],
+:lang(es) .noscript-warning[lang="es"],
+:lang(fr) .noscript-warning[lang="fr"],
+:lang(de) .noscript-warning[lang="de"],
+:lang(it) .noscript-warning[lang="it"],
+:lang(pt) .noscript-warning[lang="pt"],
+:lang(ru) .noscript-warning[lang="ru"],
+:lang(zh) .noscript-warning[lang="zh"],
+:lang(ko) .noscript-warning[lang="ko"],
+:lang(ja) .noscript-warning[lang="ja"] {
+    display: block;
+}

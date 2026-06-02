@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 09 — Sortable + Storable List Capstone</title>
+  <link rel="stylesheet" href="./styles/main.css" />
+  <script type="module" src="./scripts/main.js"></script>
+</head>
+<body>
+  <main>
+    <h1>Lesson 09 — Sortable + Storable List Capstone</h1>
+
+    <p class="lesson-intro">
+      This capstone combines <strong>lesson 07 (Strategy)</strong> for swappable sort behavior
+      with <strong>lesson 08 (Dependency Injection)</strong> for swappable storage backends.
+      A single <code>&lt;sortable-storable-list&gt;</code> component takes both a
+      <code>strategy</code> attribute (sort comparator) and a <code>storage</code> attribute
+      (backend type) — and either can change independently at runtime without losing the current
+      list of items.
+      <br /><br />
+      <strong>Storage swap behavior:</strong> When you change storage, the current items are
+      saved to the newly-selected backend immediately. Switching memory &rarr; localStorage
+      persists what you have so far; switching localStorage &rarr; memory keeps the items in RAM
+      (and they vanish on page reload). If the new backend already has saved data and the current
+      list is empty, the existing data is loaded instead — so a prior localStorage session
+      survives a page reload automatically.
+      <br /><br />
+      The two source modules (<code>strategies.js</code> from lesson 07 and
+      <code>storage.js</code> from lesson 08) are <em>duplicated</em> here rather than imported
+      from their original locations, following the curriculum's duplicate-per-lesson rule so
+      each lesson stands alone.
+    </p>
+
+    <div class="demo">
+      <sortable-storable-list strategy="byNameAsc" storage="memory"></sortable-storable-list>
+    </div>
+  </main>
+</body>
+</html>

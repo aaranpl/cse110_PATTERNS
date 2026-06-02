@@ -1,0 +1,47 @@
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 70ch;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  line-height: 1.6;
+}
+
+h1 { margin-bottom: 0.25rem; }
+
+.intro { color: #374151; }
+.intro code {
+  background: #f1f5f9;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.demo {
+  margin: 2rem 0;
+}
+
+.callout {
+  border-left: 4px solid #0066cc;
+  background: #eef6ff;
+  padding: 1rem 1.25rem;
+  margin: 2rem 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.callout h2 {
+  margin-top: 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #0066cc;
+}
+
+.callout p { margin: 0.5rem 0 0; }
+.callout p:first-of-type { margin-top: 0; }
+
+.callout code {
+  background: #dbeafe;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}

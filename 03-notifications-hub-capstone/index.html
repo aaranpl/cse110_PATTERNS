@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 03 — Notifications Hub Capstone</title>
+  <link rel="stylesheet" href="./styles/main.css" media="screen" />
+  <script type="module" src="./scripts/main.js"></script>
+</head>
+<body>
+  <h1>Notifications Hub Capstone</h1>
+
+  <p>
+    This capstone combines <strong>pub/sub (lesson 01)</strong> and
+    <strong>delegated routing (lesson 02)</strong>. Each
+    <code>&lt;status-publisher&gt;</code> child fires a <code>notify</code>
+    <code>CustomEvent</code> that bubbles up through the light DOM to the
+    <code>&lt;notifications-hub&gt;</code>
+    parent, which holds exactly <em>one</em> listener on itself — it routes each
+    event into a per-source stack using <code>event.detail.source</code>.
+    We set <code>composed: true</code> on the event so it can cross shadow DOM
+    boundaries if it ever fires from inside a shadow root; in this demo the event
+    fires on the host element itself, so it already travels through the light DOM.
+    Note: adding a fourth publisher requires <strong>no changes to the hub</strong>
+    — that's the power of routing by <code>event.detail.source</code> rather than
+    hard-coding handlers per child.
+  </p>
+
+  <hr />
+
+  <notifications-hub>
+    <status-publisher source="server-a"></status-publisher>
+    <status-publisher source="server-b"></status-publisher>
+    <status-publisher source="server-c"></status-publisher>
+  </notifications-hub>
+
+  <noscript>
+    <p>JavaScript is required to run this example.</p>
+  </noscript>
+</body>
+</html>

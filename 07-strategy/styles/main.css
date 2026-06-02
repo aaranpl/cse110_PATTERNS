@@ -1,0 +1,54 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+  background-color: #ffffff;
+  color: #212529;
+}
+
+main {
+  max-width: 70ch;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  color: #0d1117;
+}
+
+.lesson-intro {
+  margin: 0 0 2.5rem;
+  padding: 1.25rem 1.5rem;
+  background-color: #f0f4ff;
+  border-left: 4px solid #0d6efd;
+  border-radius: 0 8px 8px 0;
+  color: #343a40;
+}
+
+.lesson-intro strong {
+  color: #0d1117;
+}
+
+.lesson-intro em {
+  font-style: italic;
+}
+
+.lesson-intro code {
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+  font-size: 0.875em;
+  background-color: #dde3f5;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+.demo {
+  margin-top: 2rem;
+}

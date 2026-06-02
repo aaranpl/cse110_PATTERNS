@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 13 — CRUD</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <script type="module" src="scripts/main.js"></script>
+</head>
+<body>
+  <h1>Lesson 13 — CRUD</h1>
+  <p class="intro">
+    This lesson demonstrates the full Create / Read / Update / Delete lifecycle against a tasks API.
+    The component depends on a <code>TasksService</code> facade — it doesn't know whether the backend
+    is memory or REST. This closes the loop with lesson 08 (Dependency Injection): same pattern,
+    applied to the full data lifecycle.
+  </p>
+
+  <div class="card">
+    <task-manager></task-manager>
+  </div>
+
+  <aside class="callout">
+    <h2>Swappable backend — the DI payoff</h2>
+    <p>
+      <code>main.js</code> wires <code>new TasksService(new MemoryBackend())</code> and assigns it
+      as <code>taskManager.service</code>. To switch to a REST backend, replace
+      <code>MemoryBackend</code> with a <code>RestBackend</code> — the component doesn't change.
+      See <code>README.md</code> for the optional <code>json-server</code> setup.
+    </p>
+  </aside>
+</body>
+</html>

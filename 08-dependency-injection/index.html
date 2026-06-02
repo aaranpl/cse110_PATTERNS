@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dependency Injection Demo</title>
+    <link rel="stylesheet" href="main.css" media="screen">
+		<script src="main.js" type="module"></script>
+</head>
+<body>
+    <main>
+        <h1>Dependency Injection Demo</h1>
+			  <p>Dependency injection is an example of what we may call <em>inversion of control</em>. It's a design pattern that allows us to decouple the creation of objects from their dependencies. This is useful for modifiability, maintenance, and even testing!</p>
+
+			  <p>In this demo, we'll use dependency injection to create a web component that uses different storage implementations. We'll also use a factory to create the storage implementation.  This could show you how you can <em>stub</em> code out with simple implementations and then replace more complicated ones later on.
+				</p>
+
+        <section>
+            <h2>Memory Storage</h2>
+						<p class="storage-info">Data stored in memory - resets on page reload, not secure, quite performant</p>
+
+						<task-list storage="memory"></task-list>
+        </section>
+
+        <section>
+            <h2>LocalStorage</h2>
+						<p class="storage-info">Data persisted in browser's <code>localStorage</code> - survives page reload, not secure, quite performant</p>
+
+            <task-list storage="localStorage"></task-list>
+        </section>
+
+        <!-- eventually we could make to add a new one with a Rest endpoint.  You may want to use a mock server like json-server (https://github.com/typicode/json-server) and do a simple local backend. I always encourage you to mock before you implement.  However, before rushing out and making an endpoint consider what ility improvements would we have using the REST endpoint and what might we lose?  Hint: Enjoy this code on the plane? -->
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  color: #111827;
+  background: #f9fafb;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin: 0 0 0.5rem;
+  color: #1f2937;
+}
+
+.intro {
+  color: #4b5563;
+  margin: 0 0 2rem;
+}
+
+.intro code {
+  background: #e5e7eb;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.callout {
+  margin-top: 2rem;
+  background: #eff6ff;
+  border-left: 4px solid #3b82f6;
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  font-size: 0.92rem;
+  color: #1e3a5f;
+}
+
+.callout h2 {
+  font-size: 1rem;
+  margin: 0 0 0.4rem;
+  color: #1d4ed8;
+}
+
+.callout p {
+  margin: 0;
+}
+
+.callout code {
+  background: #dbeafe;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.88em;
+}

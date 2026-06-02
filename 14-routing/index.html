@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Routing</title>
+  <!--
+    Apply the stored theme BEFORE the stylesheet paints, to avoid a flash
+    of light-themed content (FOUC) on reload for users with the dark
+    preference saved. This is a tiny inline classic script (not a module)
+    so it runs synchronously in document order, ahead of the <link> below.
+    Keep the storage key here in sync with preferences-view.js.
+  -->
+  <script>
+    (function () {
+      var t = localStorage.getItem('patterns:14:theme');
+      if (t) document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="styles/main.css">
+  <script type="module" src="scripts/main.js"></script>
+</head>
+<body>
+  <h1>Hash Routing</h1>
+  <p>
+    The URL hash is application state. Update it to navigate; read it to know
+    which view to show. The browser's back and forward buttons work for free.
+    The <em>same URL produces the same view</em> — that's the contract.
+  </p>
+  <p>
+    On each route change, the active view is destroyed and a new one is
+    constructed. State that should persist across navigations (like the
+    theme preference here) lives elsewhere (localStorage, a shared model).
+  </p>
+
+  <nav>
+    <a href="#/list">List</a>
+    <a href="#/prefs">Preferences</a>
+  </nav>
+
+  <main id="view-outlet" aria-live="polite"></main>
+</body>
+</html>
